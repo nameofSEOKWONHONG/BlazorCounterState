@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject ICounterStateViewModel _counterViewModel
+@inject IToastService _toastService
 
 <PageTitle>CounterStateServer</PageTitle>
 
@@ -18,3 +20,15 @@
         </article>
     </main>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        _counterViewModel.OnNotify += (s, e) => _toastService.ShowInfo($"count is {_counterViewModel.Count}");            
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+    }
+}

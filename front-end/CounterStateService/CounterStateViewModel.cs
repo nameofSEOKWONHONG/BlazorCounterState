@@ -8,6 +8,8 @@ namespace CounterState
 {
     public class CounterStateViewModel : ICounterStateViewModel
     {
+        public event EventHandler? OnNotify;
+
         private int _count;
         public int Count
         {
@@ -18,6 +20,7 @@ namespace CounterState
                 OnPropertyChanged();
             } 
         }
+
         public void Increment()
         {
             Count += 1;
@@ -35,7 +38,11 @@ namespace CounterState
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            if(OnNotify != null)
+            {
+                OnNotify(this, new EventArgs());
+            }
         }
-    }    
+    }
 }
 

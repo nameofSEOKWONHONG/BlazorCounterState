@@ -1,4 +1,6 @@
 @inherits LayoutComponentBase
+@inject ICounterStateViewModel _counterViewModel
+@inject IToastService _toastService
 
 <div class="page">
     <div class="sidebar">
@@ -11,7 +13,15 @@
         </div>
 
         <article class="content px-4">
+            <BlazoredToasts Timeout="4"/>
             @Body
         </article>
     </main>
 </div>
+
+@code {
+    protected override void OnInitialized()
+    {
+        _counterViewModel.OnNotify += (s, e) => _toastService.ShowInfo($"count is {_counterViewModel.Count}");
+    }
+}
