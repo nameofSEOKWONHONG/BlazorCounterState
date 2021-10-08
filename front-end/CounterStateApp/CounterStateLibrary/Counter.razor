@@ -1,4 +1,5 @@
-﻿@inject ICounterStateViewModel _counterStateViewModel
+﻿@using System.ComponentModel
+@inject ICounterStateViewModel _counterStateViewModel
 
 <PageTitle>Counter</PageTitle>
 
@@ -12,9 +13,12 @@
 @code {
     protected override void OnInitialized()
     {
-        _counterStateViewModel.PropertyChanged += (sender, args) =>
-        {
-        
-        };
+        _counterStateViewModel.PropertyChanged -= CounterStateOnPropertyChanged;
+        _counterStateViewModel.PropertyChanged += CounterStateOnPropertyChanged;
     }
+    
+    private void CounterStateOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    } 
 }
