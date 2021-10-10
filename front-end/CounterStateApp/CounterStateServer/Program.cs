@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using CounterStateServer.Data;
 using CounterState;
+using CounterStateServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ builder.Services.AddSingleton<ICounterStateViewModel, CounterStateViewModel>();
 builder.Services.AddBlazoredToast();
 builder.Services.AddHostedService<CounterStateBackgroundService>();
 builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(5));
+builder.Services.AddHostedService<KafkaConsumerService>();
 
 var app = builder.Build();
 

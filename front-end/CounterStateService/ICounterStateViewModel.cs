@@ -12,6 +12,7 @@ namespace CounterState
     public interface ICounterStateViewModel : INotifyPropertyChanged, INotifier
     {
         int Count { get; set; }
+        string Message { get; set; }
         void Increment();
         void Decrement();
     }
