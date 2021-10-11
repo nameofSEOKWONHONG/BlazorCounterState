@@ -44,4 +44,8 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
+/*add hub*/
+app.MapHub<BlazorChatHub>(BlazorChatHub.HubUrl);
+
+
 app.Run();

@@ -19,7 +19,7 @@ namespace CounterStateServer
             var config = new ConsumerConfig
             {
                 BootstrapServers = "127.0.0.1:9092",
-                GroupId = "test_topic",
+                GroupId = "tester1",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
