@@ -21,5 +21,10 @@
     private void CounterStateOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         InvokeAsync(StateHasChanged);
-    } 
+    }
+
+    public void Dispose()
+    {
+        _counterStateViewModel.PropertyChanged -= CounterStateOnPropertyChanged;
+    }
 }

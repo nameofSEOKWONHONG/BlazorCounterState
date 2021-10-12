@@ -1,0 +1,8 @@
+﻿@page "/counter2"
+@inherits Fluxor.Blazor.Web.Components.FluxorComponent
+
+<h3>Counter2</h3>
+
+<p>Current count: @CounterState.Value.ClickCount</p>
+
+<button class="btn btn-primary" @onclick=IncrementCount>Click me</button>

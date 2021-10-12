@@ -1,4 +1,6 @@
 @page "/"
+@using System.ComponentModel
+@using Fluxor
 @inject ICounterStateViewModel _counterViewModel
 @inject IToastService _toastService
 <PageTitle>Index</PageTitle>
@@ -7,8 +9,24 @@
 
 Welcome to your new app.
 
+<p>count is : @_counterViewModel.Count</p>
+
 <SurveyPrompt Title="How is Blazor working for you?"/>
 
 @code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _counterViewModel.PropertyChanged += CounterStateOnPropertyChanged;
+    }
+    
+    private void CounterStateOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        InvokeAsync(StateHasChanged);
+    }
 
+    public void Dispose()
+    {
+        _counterViewModel.PropertyChanged -= CounterStateOnPropertyChanged;
+    }
 }

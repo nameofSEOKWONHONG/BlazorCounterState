@@ -1,0 +1,42 @@
+﻿@page "/edit"
+
+@inject IEditStateViewModel _editStateViewModel;
+
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in _editStateViewModel.Users)
+        {
+            <tr @onclick="(() => { _editStateViewModel.SelectedUser = user; Name = user.Name; Age = user.Age;})">
+                <td>@user.Name</td>
+                <td>@user.Age</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <input type="text" @bind="@Name"/>
+    <input type="text" @bind="@Age"/>
+    <button class="btn btn-primary" @onclick="(() => _editStateViewModel.Save(new UserStateViewModel(){ Name = Name, Age = Age}))">save</button>
+    <button class="btn btn-primary" @onclick="(() => _editStateViewModel.Clear())">clear</button>
+</div>
+
+@code {
+    private string Name;
+    private int Age;
+
+    protected override void OnInitialized()
+    {
+        
+        base.OnInitialized();
+    }
+
+}

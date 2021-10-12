@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Metrics;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Components;
 
 namespace CounterState
 {
-    public class CounterStateViewModel : ICounterStateViewModel
+    public class CounterStateViewModel : ViewModelBase, ICounterStateViewModel
     {
-        public event EventHandler? OnNotify;
-
         private int _count;
         public int Count
         {
@@ -42,18 +42,10 @@ namespace CounterState
         {
             Count -= 1;
         }
-
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        
+        public override void Dispose()
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            if(OnNotify != null)
-            {
-                OnNotify(this, new EventArgs());
-            }
+            
         }
     }
 }

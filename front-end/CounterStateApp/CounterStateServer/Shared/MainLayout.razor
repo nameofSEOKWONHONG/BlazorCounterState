@@ -24,7 +24,7 @@
 @code {
     protected override void OnInitialized()
     {
-        _counterViewModel.OnNotify += (s, e) =>
+        _counterViewModel.PropertyChanged += (s, e) =>
         {
             _toastService.ShowInfo($"count is {_counterViewModel.Count}");
         };            
