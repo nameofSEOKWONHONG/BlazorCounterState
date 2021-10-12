@@ -19,8 +19,8 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<ICounterStateViewModel, CounterStateViewModel>();
 builder.Services.AddBlazoredToast();
 builder.Services.AddHostedService<CounterStateBackgroundService>();
-builder.WebHost.UseShutdownTimeout(TimeSpan.FromSeconds(5));
-builder.Services.AddHostedService<KafkaConsumerService>();
+
+//builder.Services.AddHostedService<KafkaConsumerService>();
 
 var app = builder.Build();
 
@@ -31,8 +31,6 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
-
 
 app.UseHttpsRedirection();
 
@@ -46,6 +44,5 @@ app.MapFallbackToPage("/_Host");
 
 /*add hub*/
 app.MapHub<BlazorChatHub>(BlazorChatHub.HubUrl);
-
 
 app.Run();
