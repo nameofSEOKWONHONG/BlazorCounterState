@@ -23,6 +23,7 @@ builder.Services.AddSingleton<ICounterStateViewModel, CounterStateViewModel>();
 builder.Services.AddBlazoredToast();
 builder.Services.AddHostedService<CounterStateBackgroundService>();
 builder.Services.AddSingleton<IEditStateViewModel, EditStateViewModel>();
+
 var assembly = Assembly.GetExecutingAssembly();
 builder.Services.AddFluxor(options => options.ScanAssemblies(assembly).UseReduxDevTools());
 //builder.Services.AddHostedService<KafkaConsumerService>();
