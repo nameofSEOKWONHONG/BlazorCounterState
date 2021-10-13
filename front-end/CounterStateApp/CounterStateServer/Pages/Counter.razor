@@ -1,2 +1,18 @@
 ﻿@page "/counter"
+@inject ICounterStateViewModel _counterStateViewModel
+@inject IJSRuntime Jsr
+
 <CounterStateComponent.Counter/>
+
+<div id="reactProgressBar"></div>
+
+@code
+{
+    protected override void OnInitialized()
+    {
+        _counterStateViewModel.PropertyChanged += async (sender, args) =>
+        {
+            await Jsr.InvokeVoidAsync("RenderProgressBar", _counterStateViewModel.Count);
+        };
+    }
+}

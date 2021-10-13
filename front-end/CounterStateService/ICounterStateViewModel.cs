@@ -50,7 +50,7 @@ namespace CounterState
         public abstract void Dispose();
     }
 
-    public interface ICounterStateViewModel
+    public interface ICounterStateViewModel : IViewModelBase
     {
         int Count { get; set; }
         string Message { get; set; }
