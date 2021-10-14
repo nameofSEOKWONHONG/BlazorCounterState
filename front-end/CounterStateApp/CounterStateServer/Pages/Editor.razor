@@ -1,5 +1,8 @@
-﻿@page "/"
+﻿@page "/editor"
+@using CounterStateServer.Data
 @using Range = BlazorMonaco.Range
+
+@inject QueryExecutor _queryExecutor
 
 <h3>Code Editor</h3>
 
@@ -25,15 +28,49 @@
         <button @onclick="AddAction">Add Action (Ctrl+D)</button>
     </div>
     <div style="margin:10px 0;">
+        <button @onclick="Execute">Add Execute</button>
+    </div>
+    <div style="margin:10px 0;">
         See the console for results.
     </div>
 </div>
 
-<style>
-    .monaco-editor-container { height: 100%; }
-</style>
+<div class="col">
+    <MonacoEditor @ref="_editor" Id="sample-code-editor-123" ConstructionOptions="EditorConstructionOptions" OnDidInit="EditorOnDidInit" OnContextMenu="OnContextMenu" />
+</div>
 
-<MonacoEditor @ref="_editor" Id="sample-code-editor-123" ConstructionOptions="EditorConstructionOptions" OnDidInit="EditorOnDidInit" OnContextMenu="OnContextMenu" />
+@if (_dataSetResult == null)
+{
+    <p>popss!!!</p>
+    <p>no data</p>
+}
+else
+{
+    @foreach (var result in _dataSetResult.Results)
+    {
+        <table class="table">
+            <thead>
+            <tr>
+                @foreach (var column in result.Columns)
+                {
+                    <th>@column</th>    
+                }
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var row in result.Rows)
+            {
+                <tr>
+                    @foreach (var column in result.Columns)
+                    {
+                        <td>@row[column]</td>    
+                    }   
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+}
 
 @code {
     private MonacoEditor _editor { get; set; }
@@ -48,30 +85,30 @@
         {
             AutomaticLayout = true,
             Language = "sql",
-            Value = "",
+            Value = @"",
             Scrollbar = new EditorScrollbarOptions() {
-                UseShadows = false,
+                UseShadows = true,
                 Vertical = "Hidden",
                 AlwaysConsumeMouseWheel = false,
-                VerticalScrollbarSize = 0,
-                VerticalSliderSize = 0,
+                VerticalScrollbarSize = 10,
+                VerticalSliderSize = 10,
                 Horizontal = "Auto"
             },
             ScrollBeyondLastColumn = 0,
             ScrollBeyondLastLine = false,
             GlyphMargin = false,
             Folding = false,
-            Contextmenu = false,
-            CodeLens = false,
-            Minimap = new EditorMinimapOptions() { Enabled = false },
+            Contextmenu = true,
+            CodeLens = true,
+            Minimap = new EditorMinimapOptions() { Enabled = true },
             ReadOnly = false,
             LineNumbers = "on",
-            LineDecorationsWidth = "0",
-            Lightbulb = new EditorLightbulbOptions() { Enabled = false },
+            LineDecorationsWidth = "10",
+            Lightbulb = new EditorLightbulbOptions() { Enabled = true },
             RenderIndentGuides = false,
             RenderFinalNewline = false,
             RenderValidationDecorations = "off",
-            OverviewRulerBorder = false,
+            OverviewRulerBorder = true,
             OverviewRulerLanes = 0,
             Theme = "vs-light",
             FixedOverflowWidgets = true,
@@ -108,6 +145,8 @@
     }
 
     private string[] decorationIds;
+
+    private DataSetResult _dataSetResult;
 
     private void OnContextMenu(EditorMouseEvent eventArg)
     {
@@ -149,5 +188,13 @@
         {
             Console.WriteLine("Ctrl+D : Editor action is triggered.");
         });
+    }
+
+    private async Task Execute() {
+        var model = await _editor.GetModel();
+        var selection = await _editor.GetSelection(); 
+        var val = await model.GetValueInRange(new Range(selection.StartLineNumber, selection.StartColumn, selection.EndLineNumber, selection.EndColumn), EndOfLinePreference.CRLF);
+        if (string.IsNullOrEmpty(val)) return;
+        _dataSetResult = await _queryExecutor.ExecuteAsync(val);
     }
 }

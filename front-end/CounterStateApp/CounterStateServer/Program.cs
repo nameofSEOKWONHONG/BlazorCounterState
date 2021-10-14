@@ -20,6 +20,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<ICounterStateViewModel, CounterStateViewModel>();
+builder.Services.AddTransient<QueryExecutor>();
 builder.Services.AddBlazoredToast();
 builder.Services.AddHostedService<CounterStateBackgroundService>();
 builder.Services.AddSingleton<IEditStateViewModel, EditStateViewModel>();
