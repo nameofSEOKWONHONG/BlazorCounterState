@@ -1,5 +1,6 @@
 ﻿@page "/editor"
 @using CounterStateServer.Data
+@using Radzen
 @using Range = BlazorMonaco.Range
 
 @inject QueryExecutor _queryExecutor
@@ -28,7 +29,7 @@
         <button @onclick="AddAction">Add Action (Ctrl+D)</button>
     </div>
     <div style="margin:10px 0;">
-        <button @onclick="Execute">Add Execute</button>
+        <RadzenButton Click="Execute" Text="Add Execute"></RadzenButton>
     </div>
     <div style="margin:10px 0;">
         See the console for results.
@@ -46,30 +47,43 @@
 }
 else
 {
-    @foreach (var result in _dataSetResult.Results)
-    {
-        <table class="table">
-            <thead>
-            <tr>
-                @foreach (var column in result.Columns)
+    <RadzenTabs style="height: 880px" RenderMode="TabRenderMode.Client">
+        <Tabs>
+            @{
+                int tabIndex = 1;
+                foreach (var result in _dataSetResult.Results)
                 {
-                    <th>@column</th>    
+                    string tabTitle = "result" + tabIndex.ToString();
+                    // Change=@OnChange
+                    <RadzenTabsItem Text=@tabTitle>
+                        <div class="container">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    @foreach (var column in result.Columns)
+                                    {
+                                        <th>@column</th>
+                                    }
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <Virtualize Items="@result.Rows" Context="row">
+                                    <tr>
+                                        @foreach (var column in result.Columns)
+                                        {
+                                            <td>@row[column]</td>
+                                        }
+                                    </tr>
+                                </Virtualize>
+                                </tbody>
+                            </table>                            
+                        </div>
+                    </RadzenTabsItem>
+                    tabIndex += 1;
                 }
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var row in result.Rows)
-            {
-                <tr>
-                    @foreach (var column in result.Columns)
-                    {
-                        <td>@row[column]</td>    
-                    }   
-                </tr>
             }
-            </tbody>
-        </table>
-    }
+        </Tabs>
+    </RadzenTabs>
 }
 
 @code {

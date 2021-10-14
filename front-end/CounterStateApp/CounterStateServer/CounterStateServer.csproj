@@ -21,6 +21,7 @@
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.10" />
         <PackageReference Include="Microsoft.Data.SqlClient" Version="3.0.1" />
         <PackageReference Include="MySql.Data" Version="8.0.26" />
+        <PackageReference Include="Radzen.Blazor" Version="3.11.6" />
     </ItemGroup>
 
 </Project>

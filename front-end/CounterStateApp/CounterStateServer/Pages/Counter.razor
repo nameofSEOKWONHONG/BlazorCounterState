@@ -12,7 +12,10 @@
     {
         _counterStateViewModel.PropertyChanged += async (sender, args) =>
         {
-            await Jsr.InvokeVoidAsync("RenderProgressBar", _counterStateViewModel.Count);
+            InvokeAsync(() =>
+            {
+                Jsr.InvokeVoidAsync("RenderProgressBar", _counterStateViewModel.Count).GetAwaiter().GetResult();
+            });
         };
     }
 }
